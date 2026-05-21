@@ -1,0 +1,28 @@
+===== PRACTICAL 1: Unix/Linux General Purpose Commands =====
+
+COMMAND     DESCRIPTION                          EXAMPLE
+--------    -----------------------------------  ---------------------------
+man         Display manual/help for a command    man ls
+who         Show logged-in users                 who
+cat         Display file contents                cat file.txt
+cd          Change directory                     cd /home
+cp          Copy files                           cp a.txt b.txt
+ps          Show running processes               ps aux
+ls          List directory contents              ls -l
+mv          Move or rename files                 mv old.txt new.txt
+rm          Remove files                         rm file.txt
+mkdir       Create a directory                   mkdir myfolder
+rmdir       Remove empty directory               rmdir myfolder
+echo        Print text to terminal               echo "Hello"
+more        View file page by page               more file.txt
+date        Show current date and time           date
+time        Measure execution time of command    time ls
+kill        Kill a process by PID                kill 1234
+history     Show command history                 history
+chmod       Change file permissions              chmod 755 file.sh
+chown       Change file owner                    chown user file.txt
+finger      Show user info                       finger username
+pwd         Print working directory              pwd
+cal         Show calendar                        cal
+logout      Log out of current session           logout
+shutdown    Shutdown the system                  shutdown -h now
