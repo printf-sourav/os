@@ -1,77 +1,69 @@
-// Practical 11: Banker's Algorithm (Deadlock Avoidance)
 #include <stdio.h>
 
-#define MAX_P 10
-#define MAX_R 10
-
 int main() {
-    int n, m;
-    int alloc[MAX_P][MAX_R], max[MAX_P][MAX_R], need[MAX_P][MAX_R];
-    int avail[MAX_R], finish[MAX_P] = {0};
-    int safeSeq[MAX_P], work[MAX_R];
+
+    int n, m, i, j, count = 0;
 
     printf("Enter number of processes and resources: ");
     scanf("%d %d", &n, &m);
 
-    printf("Enter Allocation matrix:\n");
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
+    int alloc[10][10], max[10][10], need[10][10];
+    int avail[10], finish[10] = {0};
+
+    printf("Enter Allocation Matrix:\n");
+    for(i = 0; i < n; i++)
+        for(j = 0; j < m; j++)
             scanf("%d", &alloc[i][j]);
 
-    printf("Enter Maximum matrix:\n");
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++) {
+    printf("Enter Max Matrix:\n");
+    for(i = 0; i < n; i++)
+        for(j = 0; j < m; j++) {
             scanf("%d", &max[i][j]);
+
             need[i][j] = max[i][j] - alloc[i][j];
         }
 
-    printf("Enter Available resources: ");
-    for (int j = 0; j < m; j++) { scanf("%d", &avail[j]); work[j] = avail[j]; }
+    printf("Enter Available Resources:\n");
+    for(i = 0; i < m; i++)
+        scanf("%d", &avail[i]);
 
-    // Safety Algorithm
-    int count = 0;
-    while (count < n) {
-        int found = 0;
-        for (int i = 0; i < n; i++) {
-            if (!finish[i]) {
-                int ok = 1;
-                for (int j = 0; j < m; j++)
-                    if (need[i][j] > work[j]) { ok = 0; break; }
-                if (ok) {
-                    for (int j = 0; j < m; j++) work[j] += alloc[i][j];
-                    safeSeq[count++] = i;
-                    finish[i] = 1;
-                    found = 1;
+    printf("Safe Sequence: ");
+
+    for(i = 0; i < n; i++) {
+
+        for(j = 0; j < n; j++) {
+
+            if(finish[j] == 0) {
+
+                int safe = 1;
+
+                for(int k = 0; k < m; k++) {
+
+                    if(need[j][k] > avail[k]) {
+                        safe = 0;
+                        break;
+                    }
+                }
+
+                if(safe) {
+
+                    printf("P%d ", j);
+
+                    finish[j] = 1;
+
+                    count++;
+
+                    for(int k = 0; k < m; k++)
+                        avail[k] += alloc[j][k];
                 }
             }
         }
-        if (!found) { printf("System is in UNSAFE state (Deadlock possible)\n"); return 0; }
     }
 
-    printf("System is in SAFE state\nSafe Sequence: ");
-    for (int i = 0; i < n; i++)
-        printf("P%d%s", safeSeq[i], i < n-1 ? " -> " : "\n");
+    if(count == n)
+        printf("\nSystem is in SAFE state\n");
+    else
+        printf("\nSystem is NOT in SAFE state\n");
 
     return 0;
 }
-
-/*
-Compile: gcc 11_bankers.c -o bankers
-Run:     ./bankers
-
-Sample Input:
-  Processes: 5, Resources: 3
-  Allocation:
-    0 1 0
-    2 0 0
-    3 0 2
-    2 1 1
-    0 0 2
-  Maximum:
-    7 5 3
-    3 2 2
-    9 0 2
-    2 2 2
-    4 3 3
-  Available: 3 3 2
-*/
